@@ -11,6 +11,14 @@
         </select>
       </div>
       <div class="field">
+        <label for="field_title">Title</label>
+        <input id="field_title" type="text" v-model="controls.title">
+      </div>
+      <div class="field">
+        <label for="field_intro_text">Intro Text</label>
+        <input id="field_intro_text" type="text" v-model="controls.introText">
+      </div>
+      <div class="field">
         <label for="field_show_links">Show Links</label>
         <input id="field_show_links" type="checkbox" v-model="controls.showKeyLinks">
       </div>
@@ -88,7 +96,9 @@ export default {
         theme: 'light',
         fileDesktop: '',
         fileMobile: '',
-        showKeyLinks: false
+        showKeyLinks: false,
+        title: 'Test Theme',
+        introText: 'Aliqua reprehenderit laborum ad consequat proident aliquip est consectetur aute ut dolor esse proident et enim ad.'
       }
     }
   },
@@ -125,8 +135,8 @@ export default {
           break
       }
       return {
-        title: 'Test Theme',
-        introText: 'Aliqua reprehenderit laborum ad consequat proident aliquip est consectetur aute ut dolor esse proident et enim ad.',
+        title: this.controls.title,
+        introText: this.controls.introText,
         linkHeading: 'Want to know more about...',
         links: [
           { text: 'First journey based link', url: '#' },
@@ -171,7 +181,7 @@ export default {
   background-color: grey;
   padding: 10px;
 
-  @include rpl-breakpoint('m') {
+  @include rpl-breakpoint('xl') {
     display: flex;
   }
 
