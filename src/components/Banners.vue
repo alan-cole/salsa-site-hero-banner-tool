@@ -67,6 +67,7 @@ export default {
   },
   data () {
     return {
+      publicPath: process.env.BASE_URL,
       header: {
         links: [
           { text: 'Link A', url: '#' },
@@ -153,10 +154,10 @@ export default {
       }
     },
     topGraphic () {
-      return topGraphicSrc
+      return (process.env.NODE_ENV === 'development') ? topGraphicSrc : `img/header-pattern-shape.png`
     },
     bottomGraphic () {
-      return this.layoutImageSrcBp == null ? bottomGraphicSrc : ''
+      return (this.layoutImageSrcBp == null) ? ((process.env.NODE_ENV === 'development') ? bottomGraphicSrc : `img/header-pattern-bottom.png`) : ''
     }
   }
 }
