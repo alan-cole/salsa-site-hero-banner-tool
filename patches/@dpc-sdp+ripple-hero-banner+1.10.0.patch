@@ -1,0 +1,208 @@
+diff --git a/node_modules/@dpc-sdp/ripple-hero-banner/HeroBanner.vue b/node_modules/@dpc-sdp/ripple-hero-banner/HeroBanner.vue
+index c5d48d1..9b307ba 100644
+--- a/node_modules/@dpc-sdp/ripple-hero-banner/HeroBanner.vue
++++ b/node_modules/@dpc-sdp/ripple-hero-banner/HeroBanner.vue
+@@ -1,8 +1,5 @@
+ <template>
+-  <div class="rpl-hero-banner" :class="{
+-    'rpl-hero-banner--no-links': !showLinks,
+-    'rpl-hero-banner--has-logo': logo
+-  }" :style="heroBannerStyles">
++  <div class="rpl-hero-banner" :class="globalTheme" :style="heroBannerStyles">
+     <rpl-row v-if="logo">
+       <div class="rpl-hero-banner__left">
+         <img class="rpl-hero-banner__logo" :src="logo" alt="" />
+@@ -10,28 +7,18 @@
+     </rpl-row>
+     <rpl-row>
+       <div class="rpl-hero-banner__left">
+-        <h1
+-          v-if="title"
+-          class="rpl-hero-banner__title"
+-          :class="{ 'rpl-hero-banner__title--dark': (theme === 'dark') }"
+-        >
++        <h1 v-if="title" class="rpl-hero-banner__title">
+           <span>{{ title }}</span>
+         </h1>
+-        <p
+-          v-if="introText"
+-          class="rpl-hero-banner__description"
+-          :class="{ 'rpl-hero-banner__description--dark': (theme === 'dark') }"
+-        >
+-          {{ introText }}
++        <p v-if="introText" class="rpl-hero-banner__description">
++          <span>
++            {{ introText }}
++          </span>
+         </p>
+         <slot name="leftbottom"></slot>
+       </div>
+       <div class="rpl-hero-banner__right" v-if="showLinks">
+-        <h2
+-          v-if="linkHeading"
+-          class="rpl-hero-banner__link-heading"
+-          :class="{ 'rpl-hero-banner__link-heading--dark': (theme === 'dark') }"
+-        >
++        <h2 v-if="linkHeading" class="rpl-hero-banner__link-heading">
+           {{ linkHeading }}
+         </h2>
+         <ul class="rpl-hero-banner__link-list" v-if="links || moreLink">
+@@ -47,7 +34,7 @@
+               iconSymbol="arrow_right_primary"
+               iconColor="primary"
+               :underline="true"
+-              :theme="theme"
++              :theme="linkTheme"
+               :size="textLinkSize"
+             />
+           </li>
+@@ -62,7 +49,7 @@
+               iconSymbol="arrow_right_primary"
+               iconColor="primary"
+               :underline="true"
+-              :theme="theme"
++              :theme="linkTheme"
+               :emphasis="true"
+               :size="textLinkSize"
+             />
+@@ -87,7 +74,8 @@ export default {
+     linkHeading: String,
+     links: Array,
+     moreLink: Object,
+-    theme: { type: String, default: 'light' },
++    themeBp: { type: Object },
++    isCollapsibleOnThemeBelow: { type: Boolean, default: false },
+     showLinks: { type: Boolean, default: true },
+     logo: String,
+     backgroundGraphic: String
+@@ -103,6 +91,36 @@ export default {
+     },
+     textLinkSize () {
+       return this.$breakpoint.m ? 'large' : 'small'
++    },
++    isCollapsed () {
++      return (this.isCollapsibleOnThemeBelow && this.currentTheme === 'below')
++    },
++    currentTheme () {
++      let theme = 'light'
++      // Set theme based on breakpoint (small to large). Empty values are passed-through.
++      if (this.themeBp) {
++        theme = this.breakpointsSmallToLarge.reduce((prev, { label }) => {
++          return (this.$breakpoint[label] && this.themeBp[label]) ? this.themeBp[label] : prev
++        }, 'light')
++      }
++      return theme
++    },
++    globalTheme () {
++      const classes = []
++      if (!this.showLinks) {
++        classes.push('rpl-hero-banner--no-links')
++      }
++      if (this.logo) {
++        classes.push('rpl-hero-banner--has-logo')
++      }
++      if (this.isCollapsed) {
++        classes.push('rpl-hero-banner--collapsed')
++      }
++      classes.push(`rpl-hero-banner--${this.currentTheme}`)
++      return classes
++    },
++    linkTheme () {
++      return (this.currentTheme === 'light' || this.currentTheme === 'below') ? 'light' : 'dark'
+     }
+   }
+ }
+@@ -237,6 +255,33 @@ export default {
+       }
+     }
+ 
++    &--below {
++      background-color: rpl-color('white');
++      padding-top: $rpl-space * 8;
++      padding-bottom: $rpl-space * 8;
++
++      @include rpl_breakpoint('s') {
++        padding-top: $rpl-space * 13;
++        padding-bottom: $rpl-space * 13;
++      }
++
++      @include rpl_breakpoint('m') {
++        border-top: $rpl-hero-banner-border;
++      }
++    }
++
++    &--collapsed {
++      padding-bottom: $rpl-space-4;
++
++      @include rpl_breakpoint('s') {
++        padding-bottom: $rpl-space-4;
++      }
++
++      @include rpl_breakpoint('m') {
++        border-bottom: 0;
++      }
++    }
++
+     @include rpl_print {
+       padding: 0;
+       border: 0;
+@@ -289,9 +334,16 @@ export default {
+         line-height: $rpl-hero-banner-title-print-line-height;
+       }
+ 
+-      &--dark {
++      #{$root}--dark &,
++      #{$root}--transparent & {
+         @include rpl_typography_ruleset($rpl-hero-banner-title-typography-ruleset-dark);
+       }
++
++      #{$root}--transparent & {
++        span {
++          background-color: rgba(0, 0, 0, 0.7);
++        }
++      }
+     }
+ 
+     &__description {
+@@ -299,6 +351,7 @@ export default {
+       @include rpl_text_color($rpl-hero-banner-description-text-color);
+       letter-spacing: $rpl-hero-banner-description-letter-spacing;
+       margin-top: $rpl-space-3;
++      margin-bottom: 0;
+ 
+       @include rpl_breakpoint(s) {
+         margin-top: $rpl-space-4;
+@@ -306,9 +359,22 @@ export default {
+ 
+       @include rpl_print_margin('s');
+ 
+-      &--dark {
++      #{$root}--dark &,
++      #{$root}--transparent & {
+         color: $rpl-hero-banner-description-text-color-dark;
+       }
++
++      #{$root}--dark & {
++        span {
++          background-color: $rpl-display-background-color;
++        }
++      }
++
++      #{$root}--transparent & {
++        span {
++          background-color: rgba(0, 0, 0, 0.7);
++        }
++      }
+     }
+ 
+     &__link-heading {
+@@ -317,7 +383,8 @@ export default {
+       letter-spacing: rem(-0.08px);
+       margin: $rpl-hero-banner-link-heading-margin;
+ 
+-      &--dark {
++      #{$root}--dark &,
++      #{$root}--transparent & {
+         color: $rpl-hero-banner-link-heading-text-color-dark;
+       }
+     }

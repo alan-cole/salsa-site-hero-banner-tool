@@ -1,0 +1,10 @@
+diff --git a/node_modules/@dpc-sdp/ripple-global/scss/settings/_variables.scss b/node_modules/@dpc-sdp/ripple-global/scss/settings/_variables.scss
+index 814ad66..51916a3 100644
+--- a/node_modules/@dpc-sdp/ripple-global/scss/settings/_variables.scss
++++ b/node_modules/@dpc-sdp/ripple-global/scss/settings/_variables.scss
+@@ -1,3 +1,5 @@
++@import '../../../../../src/scss/_theme.scss';
++
+ // Typography
+ $rpl-typography: (
+   'display_l': ('tera', 1.1em, 'bold', true),

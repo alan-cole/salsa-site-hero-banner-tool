@@ -1,0 +1,35 @@
+diff --git a/node_modules/@dpc-sdp/ripple-site-header/index.vue b/node_modules/@dpc-sdp/ripple-site-header/index.vue
+index e39c863..6557231 100644
+--- a/node_modules/@dpc-sdp/ripple-site-header/index.vue
++++ b/node_modules/@dpc-sdp/ripple-site-header/index.vue
+@@ -26,8 +26,8 @@
+               </button>
+               <!-- Primary vic.gov.au Logo -->
+               <div v-if="!menuContentOpen && this.rplOptions.viclogo" class="rpl-site-header__title rpl-site-header__logo-container--vic-logo-primary" :class = "{'rpl-site-header__logo-container--vic-logo-primary--cobrand' : (logo)}"> <!--Only apply vic-logo cobrand class if there is a coBrand logo-->
+-                <rpl-link :href="vicLogoPrimary.url">
+-                  <img :src="vicLogoPrimary.image" :alt="vicLogoPrimary.alt" />
++                <rpl-link href="/" aria-label="Salsa Digital logo">
++                  <img src="~/assets/img/logo-primary.png" alt="" />
+                 </rpl-link>
+               </div>
+ 
+@@ -98,7 +98,6 @@ import RplSearch from './search'
+ import RplIcon from '@dpc-sdp/ripple-icon'
+ import RplLink from '@dpc-sdp/ripple-link'
+ import Trap from 'vue-focus-lock'
+-import vicLogoPrimary from '@dpc-sdp/ripple-global/assets/images/logo-primary.png'
+ import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
+ import RplSiteHeaderEventBus from './RplSiteHeaderEventBus'
+ 
+@@ -123,11 +122,6 @@ export default {
+   },
+   data: function () {
+     return {
+-      vicLogoPrimary: {
+-        image: vicLogoPrimary,
+-        alt: 'vic_logo',
+-        url: '/'
+-      },
+       menuEl: null,
+       menuContentOpen: false,
+       searchState: 'closed',

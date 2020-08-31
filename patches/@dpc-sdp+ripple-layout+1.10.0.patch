@@ -1,0 +1,140 @@
+diff --git a/node_modules/@dpc-sdp/ripple-layout/PageLayout.vue b/node_modules/@dpc-sdp/ripple-layout/PageLayout.vue
+index dcc0cac..080943a 100644
+--- a/node_modules/@dpc-sdp/ripple-layout/PageLayout.vue
++++ b/node_modules/@dpc-sdp/ripple-layout/PageLayout.vue
+@@ -5,8 +5,21 @@
+       :class="{ 'rpl-above-content-container--with-bg': heroBackgroundImage }"
+     >
+       <div class="rpl-above-content" :style="bgGraphic">
+-        <div class="rpl-above-content__inner" :style="backgroundImage">
+-          <div class="rpl-above-content__top">
++        <div
++          class="rpl-above-content__inner"
++          :class="{
++            'rpl-above-content__back-image': !backgroundImageIsBelow
++          }"
++          :style="!backgroundImageIsBelow ? backgroundImage : null"
++        >
++          <div
++            class="rpl-above-content__top"
++            :class="{
++              'rpl-above-content__back-image': backgroundImageIsBelow,
++              'rpl-above-content__back-image--wrap': backgroundImageIsBelow
++            }"
++            :style="backgroundImageIsBelow ? backgroundImage : null"
++          >
+             <slot name="breadcrumbs"></slot>
+             <rpl-quick-exit v-if="quickexit && !menuopen" menuOffsetSelector=".rpl-above-content__inner" />
+           </div>
+@@ -48,8 +61,10 @@
+ import RplQuickExit from './QuickExit'
+ import { RplContainer, RplRow, RplCol } from '@dpc-sdp/ripple-grid'
+ import { RplSiteHeaderEventBus } from '@dpc-sdp/ripple-site-header'
++import breakpoint from '@dpc-sdp/ripple-global/mixins/breakpoint'
+ 
+ export default {
++  mixins: [breakpoint],
+   components: { RplContainer, RplRow, RplCol, RplQuickExit },
+   props: {
+     'sidebar': Boolean,
+@@ -67,7 +82,7 @@ export default {
+     },
+     'quickExit': { type: Boolean, default: null },
+     'backgroundColor': String,
+-    'heroBackgroundImage': String,
++    'heroBackgroundImage': Object,
+     'backgroundGraphic': String,
+     'withSearch': Boolean
+   },
+@@ -85,11 +100,31 @@ export default {
+       return this.backgroundColor === 'grey'
+     },
+     backgroundImage () {
+-      if (this.heroBackgroundImage) {
+-        return { 'background-image': 'url(' + this.heroBackgroundImage + ')' }
++      let backgroundImgSrc = false
++      const bgImage = this.heroBackgroundImage
++      if (bgImage) {
++        if (bgImage.srcBp) {
++          backgroundImgSrc = this.breakpointsSmallToLarge.reduce((prev, { label }) => {
++            if (this.$breakpoint[label] && bgImage.srcBp[label]) {
++              return bgImage.srcBp[label]
++            } else {
++              return prev
++            }
++          }, bgImage.src)
++        } else if (bgImage.src) {
++          backgroundImgSrc = bgImage.src
++        }
++      }
++      return backgroundImgSrc ? { 'background-image': `url(${backgroundImgSrc})` } : null
++    },
++    backgroundImageIsBelow () {
++      if (this.heroBackgroundImage && this.heroBackgroundImage.themeBp) {
++        return this.breakpointsSmallToLarge.reduce((prev, { label }) => {
++          return (this.$breakpoint[label] && this.heroBackgroundImage.themeBp[label]) ? (this.heroBackgroundImage.themeBp[label] === 'below') : prev
++        }, false)
++      } else {
++        return false
+       }
+-
+-      return {}
+     },
+     bgGraphic () {
+       return this.backgroundGraphic ? { 'background-image': `url(${this.backgroundGraphic})` } : null
+@@ -150,30 +185,47 @@ $rpl-search-back-to-top-offset: 72px / 2;
+     background-image: none !important;
+   }
+ 
+-  &__inner {
++  &__back-image {
+     background-repeat: no-repeat;
+     background-position: center;
+     background-size: cover;
+ 
+-    @each $bp, $val in $rpl-layout-top-margin {
+-      @include rpl_breakpoint($bp) {
+-        padding-top: $val;
+-      }
+-    }
+-
+     @include rpl_print {
+-      padding-top: 0;
+       background-image: none !important;
+     }
++
++    &--wrap {
++      box-sizing: border-box;
++      min-height: rem(288px);
++
++      @include rpl_breakpoint('s') {
++        min-height: rem(288px);
++      }
++
++      @include rpl_breakpoint('l') {
++        min-height: rem(488px);
++      }
++    }
+   }
+ 
+   &__top {
+     display: flex;
+     padding: 0 $rpl-header-horizontal-padding-xs;
++
+     @include rpl_breakpoint('s') {
+       justify-content: space-between;
+       padding: 0 $rpl-header-horizontal-padding-s;
+     }
++
++    @each $bp, $val in $rpl-layout-top-margin {
++      @include rpl_breakpoint($bp) {
++        padding-top: $val;
++      }
++    }
++
++    @include rpl_print {
++      padding-top: 0;
++    }
+   }
+ }
+ 

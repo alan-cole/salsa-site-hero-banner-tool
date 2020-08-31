@@ -1,0 +1,35 @@
+{
+  "name": "salsaherotool",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "docs": "vue-cli-service build; rm -rf docs; mv dist docs; cd docs; sed -i -e 's/href=\\//href=/g' index.html; sed -i -e 's/src=\\//src=/g' index.html; rm index.html-e"
+  },
+  "dependencies": {
+    "@dpc-sdp/ripple-breadcrumbs": "^1.10.0",
+    "@dpc-sdp/ripple-card": "1.10.0",
+    "@dpc-sdp/ripple-grants": "1.10.0",
+    "@dpc-sdp/ripple-hero-banner": "1.10.0",
+    "@dpc-sdp/ripple-layout": "1.10.0",
+    "@dpc-sdp/ripple-markup": "1.10.0",
+    "@dpc-sdp/ripple-site-header": "1.10.0",
+    "core-js": "^3.6.5",
+    "svg-sprite-loader": "^5.0.0",
+    "svgo-loader": "^2.2.1",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
