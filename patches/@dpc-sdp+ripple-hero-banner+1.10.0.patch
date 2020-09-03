@@ -1,5 +1,5 @@
 diff --git a/node_modules/@dpc-sdp/ripple-hero-banner/HeroBanner.vue b/node_modules/@dpc-sdp/ripple-hero-banner/HeroBanner.vue
-index c5d48d1..9b307ba 100644
+index c5d48d1..fccffbf 100644
 --- a/node_modules/@dpc-sdp/ripple-hero-banner/HeroBanner.vue
 +++ b/node_modules/@dpc-sdp/ripple-hero-banner/HeroBanner.vue
 @@ -1,8 +1,5 @@
@@ -146,7 +146,22 @@ index c5d48d1..9b307ba 100644
      @include rpl_print {
        padding: 0;
        border: 0;
-@@ -289,9 +334,16 @@ export default {
+@@ -261,8 +306,14 @@ export default {
+     &__right {
+       @include rpl_grid_full;
+       z-index: $rpl-zindex-content-top;
++      margin-top: $rpl-space * 5;
++
++      @include rpl_breakpoint('m') {
++        margin-top: $rpl-space * 6;
++      }
+ 
+       @include rpl_breakpoint('xl') {
++        margin-top: 0;
+         @include rpl_grid_column(4);
+       }
+ 
+@@ -289,9 +340,16 @@ export default {
          line-height: $rpl-hero-banner-title-print-line-height;
        }
  
@@ -164,7 +179,7 @@ index c5d48d1..9b307ba 100644
      }
  
      &__description {
-@@ -299,6 +351,7 @@ export default {
+@@ -299,6 +357,7 @@ export default {
        @include rpl_text_color($rpl-hero-banner-description-text-color);
        letter-spacing: $rpl-hero-banner-description-letter-spacing;
        margin-top: $rpl-space-3;
@@ -172,7 +187,7 @@ index c5d48d1..9b307ba 100644
  
        @include rpl_breakpoint(s) {
          margin-top: $rpl-space-4;
-@@ -306,9 +359,22 @@ export default {
+@@ -306,9 +365,22 @@ export default {
  
        @include rpl_print_margin('s');
  
@@ -196,7 +211,7 @@ index c5d48d1..9b307ba 100644
      }
  
      &__link-heading {
-@@ -317,7 +383,8 @@ export default {
+@@ -317,7 +389,8 @@ export default {
        letter-spacing: rem(-0.08px);
        margin: $rpl-hero-banner-link-heading-margin;
  
