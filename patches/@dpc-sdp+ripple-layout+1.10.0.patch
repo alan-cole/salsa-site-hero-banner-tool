@@ -1,9 +1,13 @@
 diff --git a/node_modules/@dpc-sdp/ripple-layout/PageLayout.vue b/node_modules/@dpc-sdp/ripple-layout/PageLayout.vue
-index dcc0cac..080943a 100644
+index dcc0cac..d2ffeb1 100644
 --- a/node_modules/@dpc-sdp/ripple-layout/PageLayout.vue
 +++ b/node_modules/@dpc-sdp/ripple-layout/PageLayout.vue
-@@ -5,8 +5,21 @@
-       :class="{ 'rpl-above-content-container--with-bg': heroBackgroundImage }"
+@@ -2,11 +2,24 @@
+   <main class="rpl-page" :class="{'rpl-page--with-search': withSearch }">
+     <div
+       class="rpl-above-content-container"
+-      :class="{ 'rpl-above-content-container--with-bg': heroBackgroundImage }"
++      :class="{ 'rpl-above-content-container--with-bg': backgroundImage }"
      >
        <div class="rpl-above-content" :style="bgGraphic">
 -        <div class="rpl-above-content__inner" :style="backgroundImage">

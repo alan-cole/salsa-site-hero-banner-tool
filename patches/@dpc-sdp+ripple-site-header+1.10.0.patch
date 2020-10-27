@@ -1,5 +1,5 @@
 diff --git a/node_modules/@dpc-sdp/ripple-site-header/index.vue b/node_modules/@dpc-sdp/ripple-site-header/index.vue
-index e39c863..6557231 100644
+index e39c863..cef6295 100644
 --- a/node_modules/@dpc-sdp/ripple-site-header/index.vue
 +++ b/node_modules/@dpc-sdp/ripple-site-header/index.vue
 @@ -26,8 +26,8 @@
@@ -9,7 +9,7 @@ index e39c863..6557231 100644
 -                <rpl-link :href="vicLogoPrimary.url">
 -                  <img :src="vicLogoPrimary.image" :alt="vicLogoPrimary.alt" />
 +                <rpl-link href="/" aria-label="Salsa Digital logo">
-+                  <img src="~/assets/img/logo-primary.png" alt="" />
++                  <img src="" alt="" />
                  </rpl-link>
                </div>
  

@@ -9,26 +9,34 @@
           <option value="transparent">Transparent</option>
           <option value="below">Below</option>
         </select>
+        <div>
+          <label for="field_show_links">Show Links</label>
+          <input id="field_show_links" type="checkbox" v-model="controls.showKeyLinks">
+        </div>
+        <div>
+          <label for="field_show_breadcrumbs">Show Breadcrumbs</label>
+          <input id="field_show_breadcrumbs" type="checkbox" v-model="controls.showCrumbs">
+        </div>
       </div>
       <div class="field">
-        <label for="field_title">Title</label>
-        <input id="field_title" type="text" v-model="controls.title">
+        <div>
+          <label class="full-label" for="field_title">Title</label>
+          <input id="field_title" type="text" v-model="controls.title">
+        </div>
+        <div>
+          <label class="full-label" for="field_intro_text">Intro Text</label>
+          <input id="field_intro_text" type="text" v-model="controls.introText">
+        </div>
       </div>
       <div class="field">
-        <label for="field_intro_text">Intro Text</label>
-        <input id="field_intro_text" type="text" v-model="controls.introText">
-      </div>
-      <div class="field">
-        <label for="field_show_links">Show Links</label>
-        <input id="field_show_links" type="checkbox" v-model="controls.showKeyLinks">
-      </div>
-      <div class="field">
-        <label for="field_desktop_image">Desktop</label>
-        <input id="field_desktop_image" type="file" ref="fileDesktop" @change="updateBanner" />
-      </div>
-      <div class="field">
-        <label for="field_mobile_image">Mobile</label>
-        <input id="field_mobile_image" type="file" ref="fileMobile" @change="updateBanner" />
+        <div>
+          <label class="full-label" for="field_desktop_image">Desktop</label>
+          <input id="field_desktop_image" type="file" ref="fileDesktop" @change="updateBanner" />
+        </div>
+        <div>
+          <label class="full-label" for="field_mobile_image">Mobile</label>
+          <input id="field_mobile_image" type="file" ref="fileMobile" @change="updateBanner" />
+        </div>
       </div>
     </div>
     <!-- Ripple Base Layout -->
@@ -40,6 +48,9 @@
         :backgroundGraphic="topGraphic"
         :heroBackgroundImage="{ srcBp: layoutImageSrcBp, themeBp: heroBannerData.themeBp }"
       >
+        <template slot="breadcrumbs">
+          <rpl-breadcrumbs v-if="controls.showCrumbs" :crumbs="breadcrumbs" />
+        </template>
         <template slot="aboveContent">
           <rpl-hero-banner v-bind="heroBannerData" class="rpl-site-constrain--on-all" />
         </template>
@@ -59,6 +70,7 @@
 <script>
 import { RplPageLayout, RplBaseLayout } from '@dpc-sdp/ripple-layout'
 import RplSiteHeader from '@dpc-sdp/ripple-site-header'
+import RplBreadcrumbs from '@dpc-sdp/ripple-breadcrumbs'
 import { RplHeroBanner } from '@dpc-sdp/ripple-hero-banner'
 import IntroBannerNoTitle from './IntroBannerNoTitle'
 import topGraphicSrc from '../assets/img/header-pattern-shape.png'
@@ -69,6 +81,7 @@ export default {
   components: {
     RplBaseLayout,
     RplPageLayout,
+    RplBreadcrumbs,
     RplHeroBanner,
     RplSiteHeader,
     IntroBannerNoTitle
@@ -97,6 +110,7 @@ export default {
         fileDesktop: '',
         fileMobile: '',
         showKeyLinks: false,
+        showCrumbs: true,
         title: 'Test Theme',
         introText: 'Aliqua reprehenderit laborum ad consequat proident aliquip est consectetur aute ut dolor esse proident et enim ad.'
       }
@@ -178,17 +192,26 @@ export default {
 @import '~@dpc-sdp/ripple-global/scss/tools';
 
 .controls {
+  z-index: 1;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background-color: grey;
   padding: 10px;
 
-  @include rpl-breakpoint('xl') {
+  @include rpl-breakpoint('m') {
     display: flex;
+  }
+
+  .full-label {
+    display: block;
   }
 
   .field {
     width: 100%;
     @include rpl-breakpoint('m') {
-      width: 25%;
+      width: 33.33%;
     }
 
     input {
@@ -277,6 +300,11 @@ export default {
   background-color: #9A9DA7 !important;
 }
 
+// Breadcrumbs
+.rpl-breadcrumbs {
+  margin-top: $rpl-space * 5;
+}
+
 // Icons
 .rpl-icon--color_primary {
   fill: rpl-color('salsared') !important;
@@ -286,13 +314,25 @@ export default {
   background-color: rpl-color('salsared');
 }
 
+.rpl-above-content__back-image--wrap {
+  @include rpl-breakpoint('xxl') {
+    min-height: 50vh !important;
+  }
+}
+
 .rpl-hero-banner {
   $root: &;
+
+  .rpl-above-content-container--with-bg &:not(.rpl-hero-banner--collapsed) {
+    @include rpl-breakpoint('xxl') {
+      padding-top: 25vh !important;
+    }
+  }
 
   &__title {
     #{$root}--transparent & {
       span {
-        background-color: rgba(61, 69, 82, 0.88) !important;
+        background-color: rgba(61, 69, 77, 0.88) !important;
       }
     }
   }
@@ -308,7 +348,7 @@ export default {
     }
     #{$root}--transparent & {
       span {
-        background-color: rgba(61, 69, 82, 0.88) !important;
+        background-color: rgba(61, 69, 77, 0.88) !important;
       }
     }
   }
