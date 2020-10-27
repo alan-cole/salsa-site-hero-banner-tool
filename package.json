@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "docs": "vue-cli-service build; rm -rf docs; mv dist docs; cd docs; sed -i -e 's/href=\\//href=/g' index.html; sed -i -e 's/src=\\//src=/g' index.html; rm index.html-e"
+    "docs": "vue-cli-service build; rm -rf docs; mv dist docs; node strip-slash.js"
   },
   "dependencies": {
     "@dpc-sdp/ripple-breadcrumbs": "1.10.0",
